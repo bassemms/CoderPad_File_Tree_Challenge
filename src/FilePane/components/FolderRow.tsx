@@ -1,35 +1,33 @@
-import React, { useContext } from "react";
+import React, { useState } from "react";
 import { Box, Typography } from "@mui/material";
-import { FileIcon } from "./FileIcon";
-import { useWorkspaceContext } from "../../Workspace/WorkspaceContext";
 
-interface IFolderRowProps {
+type IFolderRowProps = {
   folder: string;
-}
+  children?: React.ReactNode;
+};
 
-export const FolderRow = ({ folder }) => {
-  const { activeFile, activateFile } = useWorkspaceContext();
+export const FolderRow = ({ folder, children }: IFolderRowProps) => {
+  const [expanded, setExpanded] = useState(false);
 
   return (
-    <Box
-      display="flex"
-      height="1.5rem"
-      flexDirection="row"
-      alignItems="center"
-      key={folder}
-      px={1}
-      sx={{
-        cursor: "default",
-        background: activeFile === folder ? "#DADADA" : "inherit",
-        "&:hover": {
-          background: "#E6E6E6",
-        },
-      }}
-    >
-      <Box width="1.5rem">
-        <FileIcon fileName={folder} />
+    <Box>
+      <Box
+        display="flex"
+        flexDirection="row"
+        alignItems="center"
+        px={1}
+        sx={{
+          cursor: "pointer",
+          background: "inherit",
+          "&:hover": { background: "#E6E6E6" },
+        }}
+        onClick={() => setExpanded(!expanded)}
+      >
+        <Typography variant="body2">
+          {expanded ? "📂" : "📁"} {folder}
+        </Typography>
       </Box>
-      <Typography variant="body2">{folder}</Typography>
+      {expanded && <Box pl={2}>{children}</Box>}
     </Box>
   );
 };
